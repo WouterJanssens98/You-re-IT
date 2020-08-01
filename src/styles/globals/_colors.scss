@@ -1,0 +1,28 @@
+// Primitive colors
+// ------------------------------------------------------------------------- /
+$alabaster: #fafafa;
+$mercury: #e6e6e6;
+$dusty: #999;
+$shark: #262626;
+$midnight: #003569;
+
+$white: #fff;
+$black: #000;
+
+// Contextual colors
+// ---
+// These are the colors that you're supposed to use.
+// ------------------------------------------------------------------------- /
+$color-base: $shark;
+$border-color: $mercury;
+
+$text-color-primary: $shark;
+$link-color-primary: $midnight;
+$icon-color-primary: $shark;
+$border-color-primary: $mercury;
+$background-color-primary: $alabaster;
+
+$text-color-secondary: $dusty;
+$background-color-secondary: $white;
+
+$background-color-overlay: rgba($black, 0.3);

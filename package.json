@@ -1,0 +1,68 @@
+{
+  "name": "mobdev1-template-final",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full Code Template for the final assignments of Mobile Development I",
+  "scripts": {
+    "dev": "webpack-dev-server --mode development --open",
+    "build": "webpack --mode production --config ./webpack.config.js "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gdmgent-mobdev1/mobdev1-template-final.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gdmgent-mobdev1/mobdev1-template-final/issues"
+  },
+  "homepage": "https://github.com/gdmgent-mobdev1/mobdev1-template-final#readme",
+  "keywords": [
+    "Webpack",
+    "JS",
+    "Vanilla"
+  ],
+  "author": "Artevelde University College Ghent",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.10.3",
+    "@babel/core": "^7.10.3",
+    "@babel/polyfill": "^7.10.1",
+    "@babel/preset-env": "^7.10.3",
+    "@studiohyperdrive/stylelint-config": "^1.0.9",
+    "babel-loader": "^8.1.0",
+    "chalk": "^2.4.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.6.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-loader": "^3.0.4",
+    "eslint-plugin-import": "^2.21.2",
+    "extract-loader": "^3.2.0",
+    "fibers": "^4.0.3",
+    "file-loader": "^4.3.0",
+    "handlebars-loader": "^1.7.1",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.2",
+    "node-sass": "^4.14.1",
+    "normalize.css": "^8.0.1",
+    "progress-bar-webpack-plugin": "^1.12.1",
+    "sass": "^1.26.9",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.2.1",
+    "stylelint": "^13.6.1",
+    "stylelint-scss": "^3.18.0",
+    "stylelint-webpack-plugin": "^1.2.3",
+    "svg-url-loader": "^3.0.3",
+    "url-loader": "^2.3.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "firebase": "^7.15.4",
+    "handlebars": "^4.7.6",
+    "mapbox-gl": "^1.11.0",
+    "navigo": "^7.1.2",
+    "serviceworker-webpack-plugin": "^1.0.1"
+  }
+}
