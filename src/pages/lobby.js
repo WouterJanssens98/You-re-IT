@@ -33,8 +33,10 @@ export default () => {
     const info = await App.firebase.getUserInfo(user.uid);
     
     const gamecode = info.lobbycode;
+    const useruid = info.uid;
     const playerdiv = document.getElementsByClassName('o-lobbyform')[0];
     const title = document.getElementsByClassName('m-landing__subtitle2')[0];
+    const gamestatus = document.getElementsByClassName('m-landing__subtitle3')[0];
     title.innerHTML += ` (${gamecode})`;
     
     function getCurrentPlayers(gamecode){
@@ -61,7 +63,32 @@ export default () => {
 
     };
 
+    function checkIfAdminOfGame(useruid){
+        const docRef = App.firebase.getFirestore().collection("game").doc(gamecode)
+
+        docRef.get().then(function(doc) {
+          if (doc.exists) {
+              if(useruid === doc.data().host){
+                gamestatus.innerHTML = "Waiting for you to start the game";
+                console.log("The current user is the host of this game!")
+              } else {
+                console.log("The current user is not the host of this game")
+              }
+          } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+          }
+        }).catch(function(error) {
+          console.log("Error getting document:", error);
+        });
+
+    }
+
+    checkIfAdminOfGame(useruid)
+
     getCurrentPlayers(gamecode)
+
+
 
     document.getElementById('leave').addEventListener('click', () => {
         App.firebase.leaveGame(info.uid);

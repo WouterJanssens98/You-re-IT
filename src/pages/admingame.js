@@ -72,8 +72,6 @@ export default () => {
                     result,
                   });
                 }
-
-
                 const players = a.options[a.selectedIndex].value;
                 const duration = b.options[b.selectedIndex].value;
                 addGame(user.uid, players, duration, '');
@@ -90,12 +88,11 @@ export default () => {
                   result,
                 });
               }
-
-
               const players = a.options[a.selectedIndex].value;
               const duration = b.options[b.selectedIndex].value;
-              addGame(user.uid, players, duration, '');
-              console.log(`Game added for user ${user.email}`);
+              addGame(user.uid, players, duration, 'created');
+              console.log(`Game added by user ${user.email}`);
+              App.router.navigate('/lobby')
             // create the document
             }
           });
@@ -110,11 +107,16 @@ export default () => {
         lobbycode: invitecode,
         team: 'admin',
         location: '3.670823, 51.087544',
-      }, { merge: true })
+      }, { merge: true });
+
+      /*
         .then(
           // voorkomen dat game wordt opgestart vooraleer db in orde is
           setTimeout(() => { App.router.navigate('/mapbox'); }, 1000),
         );
+      */
+
+
     });
   });
 };

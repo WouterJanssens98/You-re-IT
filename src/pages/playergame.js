@@ -32,8 +32,6 @@ export default () => {
       .then((docSnapshot) => {
         if (docSnapshot.exists) {
           codeRef.onSnapshot((doc) => {
-            console.log('Game exists, continuing!');
-            console.log('Adding lobby code to user');
             App.firebase.getAuth().onAuthStateChanged(async (user) => {
               if (user) {
                 // add lobby code as latest game to User Database

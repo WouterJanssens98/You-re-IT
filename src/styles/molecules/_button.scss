@@ -54,6 +54,10 @@
         padding: $gutter-md;
         font-size: $font-size-button;
         }
+    &__start {
+        width: 40%;
+        margin: auto;
+    }
    
 }
 
@@ -168,6 +172,7 @@
         font-weight: bold;
         padding-right: 10px;
     }
+    
 }
 
 .m-button-mapbox {
