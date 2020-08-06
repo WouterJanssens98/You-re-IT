@@ -32,4 +32,14 @@ export default class Storage {
   setItem(key, value) {
     this.localStorage.setItem(key, value);
   }
+  
+  darkmodeEnabled(){
+    if(this.localStorage.getItem('darkmode') == true){
+      const container = document.getElementsByClassName('o-landingpage')[0];
+      container.classList.remove('o-landingpage');
+      container.classList.add('active');
+    } else {
+      // do nothing
+    }
+  }
 }

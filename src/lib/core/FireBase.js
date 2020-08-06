@@ -8,6 +8,12 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
+<<<<<<< HEAD
+=======
+import 'firebase/analytics';
+import Router from './Router';
+import * as consts from '../../consts';
+>>>>>>> Added Password check, better Redirect if not logged in, Pre Game Lobby for player
 
 class FireBase {
   constructor(apiKey, projectId, messagingSenderId) {
@@ -38,6 +44,38 @@ class FireBase {
 
   getAuth() {
     return firebase.auth();
+  }
+
+  isLoggedIn() {
+    if (this.getAuth().currentUser == null) {
+      const router = new Router(window.location.origin, consts.ROUTER_HASH);
+      router.navigate('/game');
+    }
+  }
+
+  getUserInfo(uid) {
+    const locationRef = this.getFirestore().collection('users').doc(uid);
+    return new Promise(((resolve, reject) => {
+      locationRef.get()
+        .then((docSnapshot) => {
+          if (docSnapshot.exists) {
+            locationRef.onSnapshot((doc) => {
+              const value = doc.data();
+              // const value = doc.get('lobbycode');
+              resolve(value);
+            });
+          }
+        });
+    }));
+  }
+
+  leaveGame(uid) {
+    const gameRef = this.getFirestore().collection("users").doc(uid);
+
+    const setWithMerge = gameRef.set({
+      lobbycode: ""
+    }, { merge: true });
+  
   }
 }
 

@@ -40,6 +40,10 @@ class App {
     if (!this._renderer) throw new Error('The App Core was not initialized!');
     this._renderer.render(html);
   }
+
+  static get tools() {
+    return Tools;
+  }
 }
 
 export default App;

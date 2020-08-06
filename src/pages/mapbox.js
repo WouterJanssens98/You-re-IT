@@ -15,6 +15,15 @@ export default () => {
   // render the template
   App.render(mapboxTemplate({ title }));
 
+<<<<<<< HEAD
+=======
+  App.firebase.isLoggedIn();
+  
+  const bounds = [
+    [3.640046, 51.062434], // Southwest coordinates
+    [3.695991, 51.109025], // Northeast coordinates
+  ];
+>>>>>>> Added Password check, better Redirect if not logged in, Pre Game Lobby for player
   // create the MapBox options
   const mapBoxOptions = {
     container: 'mapbox',
