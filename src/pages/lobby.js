@@ -33,8 +33,8 @@ export default () => {
     const info = await App.firebase.getUserInfo(user.uid);
     
     const gamecode = info.lobbycode;
-    const playerdiv = document.getElementsByClassName('o-historyform')[0];
-    const title = document.getElementsByClassName('m-landing__subtitle')[0];
+    const playerdiv = document.getElementsByClassName('o-lobbyform')[0];
+    const title = document.getElementsByClassName('m-landing__subtitle2')[0];
     title.innerHTML += ` (${gamecode})`;
     
     function getCurrentPlayers(gamecode){

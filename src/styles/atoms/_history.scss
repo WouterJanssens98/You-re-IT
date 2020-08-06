@@ -27,6 +27,16 @@
             font-weight: bold;
             margin-right: $gutter;
         }
+
+        &_header4 {
+            color: $shark;
+            font-style: italic;
+            font-weight: bold;
+            font-size: $font-size-base;
+            margin-left: $gutter;
+        }
+
+
     }
 
     &-result {
@@ -37,6 +47,14 @@
 
         &_header {
             color: $dusty;
+            font-style: italic;
+            font-weight: bold;
+            font-size: $font-size-base;
+            margin-right: $gutter;
+        }
+
+        &_header2 {
+            color: $shark;
             font-style: italic;
             font-weight: bold;
             font-size: $font-size-base;
