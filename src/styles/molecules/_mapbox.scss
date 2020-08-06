@@ -1,0 +1,33 @@
+/**
+ * The MapBox Styles
+ */
+
+.m-mapbox {
+
+    height: 100%;
+}
+
+.m-menu {
+    display: none;
+    width: 100%;
+    background-color: black;
+    height: 20%;
+
+
+    &-2 {
+        width: 60%;
+        margin: auto;
+        background-color: white;
+        height: 240px;
+        margin-top: 10px;
+        border-radius: $gutter;
+        box-shadow: 5px 5px 12px #888888;
+    }
+}
+
+.a-mapbox-exit {
+    color: white;
+    font-size: $font-size-setting;
+    text-align: center;
+    margin-bottom: 0px;
+}

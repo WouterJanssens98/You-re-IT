@@ -1,0 +1,48 @@
+<div class="o-landingpage">
+
+    <div class="m-landing__player">
+        <h1 class="m-landing__title">You're it </h1>
+        <h1 class="m-landing__subtitle">Setup your game </h1>
+
+
+        <div class="o-historyform-2">
+
+            <div class="o-dropdown">
+                <p class="a-history-game_header2">Duration</p>
+                <select id="m-dropdown">
+                    <option value="5">5 minuten</option>
+                    <option value="10" selected="selected">10 minuten</option>
+                    <option value="20">20 minuten</option>
+                </select>
+            </div>
+            <div class="o-dropdown">
+                <p class="a-history-game_header2">Players</p>
+                <select id="m-dropdown-2">
+                    <option class="a-dropdown-text" value="3">3 spelers</option>
+                    <option class="a-dropdown-text" value="5" selected="selected">5 spelers</option>
+                    <option class="a-dropdown-text" value="10">10 spelers</option>
+                </select>
+            </div>
+
+            <div class="o-dropdown">
+                <p class="a-history-game_header2">Invite code </p>
+                <p id="invitecode" class="a-history-game_header3"> ABCD</p>
+            </div>
+
+            
+        </div>
+
+        <div class="m-button">
+            <button id="startgame" class="m-buttonform__adminstart"><a class="m-button__link"
+                    >Start Game!</a></button>
+        </div>
+
+        <div class="m-button">
+            <button id="startgame" class="m-buttonform__admingame"><a class="m-button__link"
+                    href="./register.hbs">{{routerLink "player" "Back to player selection"}}</a></button>
+        </div>
+
+
+
+
+    </div>

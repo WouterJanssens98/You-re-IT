@@ -1,0 +1,210 @@
+.m-button {
+    padding-top: 30px;
+   
+    a:hover {text-decoration: none};
+
+    :hover {
+        background-color: $button-hover;
+        transition: all 0.3s ease-in-out;
+        color : white
+    };
+    
+    
+
+    &__new {
+    border : 0;
+    width: 200px;
+    transition: all 0.3s ease-in-out;
+    background-color: white;
+    border-color: 1px solid black;
+    box-shadow: 6px 6px 6px #888888;
+    border-radius: $gutter;
+    padding: $gutter-md;
+    font-size: $font-size-button;
+   
+    }
+
+    &__existing {
+        border : 0;
+        width: 200px;
+        transition: all 0.3s ease-in-out;
+        background-color: white;
+        border-color: 1px solid black;
+        box-shadow: 6px 6px 6px #888888;
+        border-radius: $gutter;
+        padding: $gutter;
+        font-size: $font-size-button;
+        margin-bottom: 20px;
+    }
+
+    &__link {
+        display: inline-block;
+        text-align :  center;
+    }
+
+    &__exit {
+        color: white;
+        border : 0;
+        width: 200px;
+        transition: all 0.3s ease-in-out;
+        background-color: $dusty;
+        border-color: 1px solid black;
+        box-shadow: 6px 6px 6px #888888;
+        border-radius: $gutter;
+        padding: $gutter-md;
+        font-size: $font-size-button;
+        }
+   
+}
+
+.m-buttonform {
+    a:hover {text-decoration: none};
+    text-align: center;
+    :hover {
+        background-color: $white;
+        transition: all 0.3s ease-in-out;
+        color : $button-hover
+    };
+   
+    
+
+    
+    &__create {
+        transition: all 0.3s ease-in-out;
+        border : 0;
+        box-shadow: 6px 6px 10px #888888;
+        width: 200px;
+        border-radius: $gutter;
+        background: $button-hover;
+        padding: $gutter-sm;
+        font-size: $font-size-button;
+        margin-bottom: 0px;
+        margin: auto;
+        color: white;
+        margin-top: 70px;
+        font-weight: bold;
+
+    }
+
+    &__google {
+        transition: all 0.3s ease-in-out;
+        border : 0;
+        box-shadow: 6px 6px 10px #888888;
+        width: 200px;
+        border-radius: $gutter;
+        background: white;
+        padding: $gutter-sm;
+        font-size: $font-size-medium;
+        margin-bottom: 0px;
+        margin: auto;
+        color: $dusty ;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    &__player {
+        transition: all 0.3s ease-in-out;
+        border : 0;
+        box-shadow: 6px 6px 10px #888888;
+        width: 200px;
+        border-radius: $gutter;
+        background: white;
+        padding: $gutter-sm;    
+        font-size: $font-size-base;
+        margin-bottom: 0px;
+        margin: auto;
+        color: $dusty ;
+        margin-top: 10px;
+        font-weight: bold;
+        padding-right: 10px;
+
+    }
+
+    &__settings {
+        transition: all 0.3s ease-in-out;
+        border : 0;
+        box-shadow: 6px 6px 10px #888888;
+        width: 200px;
+        border-radius: $gutter;
+        background: $button-hover;
+        padding: $gutter-sm;    
+        font-size: $font-size-base;
+        margin-bottom: 0px;
+        margin-top: 60px;
+        color: $white ;
+        font-weight: bold;
+        padding-right: 10px;
+    }
+
+    &__admingame {
+        transition: all 0.3s ease-in-out;
+        border : 0;
+        box-shadow: 6px 6px 10px #888888;
+        width: 60%;
+        border-radius: $gutter;
+        background: white;
+        padding: $gutter-sm;    
+        font-size: $font-size-base;
+        margin-bottom: 0px;
+        margin: auto;
+        color: $dusty ;
+        margin-top: 0px;
+        font-weight: bold;
+        padding-right: 10px;
+    }
+    &__adminstart {
+        transition: all 0.3s ease-in-out;
+        border : 0;
+        box-shadow: 6px 6px 10px #888888;
+        width: 60%;
+        border-radius: $gutter;
+        background: white;
+        padding: $gutter-sm;    
+        font-size: $font-size-base;
+        margin-bottom: 0px;
+        margin: auto;
+        color: black ;
+        margin-top: 0px;
+        font-weight: bold;
+        padding-right: 10px;
+    }
+}
+
+.m-button-mapbox {
+    display: block;
+    right: 10px;
+    padding-top: 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+&-icon {
+    font-size: 30px;
+    color: white;
+    background-color: black;
+    border: 0px solid black;
+    border-radius: 5px;
+    outline: 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 10px;
+
+}
+&-icon-2 {
+    background-color: black ;
+    font-size: 30px;
+    color: white;
+    border: 0px solid black;
+    border-radius: 5px;
+    outline: 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 10px;
+    margin-left: 10px;
+
+}
+
+
+}

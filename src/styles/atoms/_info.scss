@@ -1,0 +1,24 @@
+.a-info {
+    margin-top: 15px;
+    text-align: center;
+
+    p {
+        color: white;
+        font-size: $font-size-medium;
+        margin-top : 10px
+
+    }
+
+    &-login {
+        color: white;
+        font-size: $font-size-base;
+        font-weight: bold;
+    }
+
+    &-forgot {
+        text-align: center;
+        color: white;
+        font-size: $font-size-medium;
+        margin-top: 10px;
+    }
+}

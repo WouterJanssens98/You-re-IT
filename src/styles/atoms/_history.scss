@@ -1,0 +1,47 @@
+.a-history {
+
+
+    &-game {
+        margin-left: $gutter;
+        font-size: $font-size-base;
+        font-weight: bold;
+
+        &_header {
+            color: $dusty;
+            font-style: italic;
+            font-weight: bold;
+            font-size: $font-size-base;
+            margin-left: $gutter;
+        }
+
+        &_header2 {
+            color: black;
+            font-style: italic;
+            font-weight: bold;
+            margin-left: $gutter-sm;
+        }
+
+        &_header3 {
+            color: black;
+            font-style: italic;
+            font-weight: bold;
+            margin-right: $gutter;
+        }
+    }
+
+    &-result {
+        margin-right: $gutter;
+        font-size: $font-size-base;
+        font-size: $font-size-base;
+        font-weight: bold;
+
+        &_header {
+            color: $dusty;
+            font-style: italic;
+            font-weight: bold;
+            font-size: $font-size-base;
+            margin-right: $gutter;
+        }
+
+    }
+}

@@ -1,0 +1,39 @@
+.a-input {
+    &-name {
+    font-size: $font-size-medium;
+    margin-right: 0px;
+    }
+
+    &-form {
+        box-shadow: none;
+        border: 0px solid white;
+        border-bottom: 0.5px solid $button-hover;
+        padding-bottom: 5px;
+        width: 80%;
+        
+
+        textarea:focus, input:focus {
+            border: 0px solid white;
+
+        }
+        
+    }
+
+    &-form-2 {
+        margin : 0px ;
+        box-shadow: none;
+        border: 0px solid white;
+        border-bottom: 0.5px solid $button-hover;
+        padding-bottom: 5px;
+        width: 80%;
+        text-align: center;
+        
+
+        textarea:focus, input:focus {
+            border: 0px solid white;
+
+        }
+        
+    }
+    
+}

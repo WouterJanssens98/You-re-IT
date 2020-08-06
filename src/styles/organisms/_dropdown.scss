@@ -1,0 +1,23 @@
+.o-dropdown {
+   
+    height: 50px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border: 0px;
+    background-color: white;
+    border-radius: 20px;
+    font-size: $font-size-medium;
+
+    select {
+        outline:0px;
+        border: 0px;
+        width: 120px;
+        color : $button-hover;
+        background-color: white;
+        border-radius: 20px;
+
+    }
+}
