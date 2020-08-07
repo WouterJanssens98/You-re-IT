@@ -68,23 +68,7 @@ export default () => {
 
     };
 
-    /*
-    function getGameStatus(gamecode){
-      const gameRef = App.firebase.getFirestore().collection('game').doc(gamecode)
-      gameRef.get()
-      .then((docSnapshot) => {
-        if (docSnapshot.exists) {
-          gameRef.onSnapshot((doc) => {
-            const status = doc.data().result;
-            if(status === "stopped"){
-              App.firebase.leaveGame(info.uid);
-              window.alert("This game has been stopped by the host")
-            }
-          });
-        }
-      });
-    };
-    */
+    
     
     const host = await App.firebase.isAdmin(gamecode,useruid)
     if(host){
@@ -107,10 +91,12 @@ export default () => {
         
       }
       App.firebase.leaveGame(info.uid);
-        
-      
-
-      // check if firestore entry exists
-      
     });
+
+    document.getElementsByClassName('o-lobbyform2')[0].addEventListener('click', () => {
+      window.alert('Started')
+    })
+
+
 }})};
+

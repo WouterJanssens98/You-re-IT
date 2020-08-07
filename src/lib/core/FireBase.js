@@ -109,6 +109,13 @@ class FireBase {
             this.leaveGame(uid);
             window.alert("This game has been stopped by the host")
           }
+          else if(status === "running"){
+            setTimeout(router.navigate('/mapbox'),1000);
+          }
+          else if(status === "finished"){
+            window.alert("The game has finished. Thanks for playing!")
+            setTimeout(router.navigate('/homepage'),1000);
+          }
         });
       }
     });
