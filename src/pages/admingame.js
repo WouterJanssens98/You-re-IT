@@ -92,7 +92,7 @@ export default () => {
               const duration = b.options[b.selectedIndex].value;
               addGame(user.uid, players, duration, 'created');
               console.log(`Game added by user ${user.email}`);
-              App.router.navigate('/lobby')
+              setTimeout(App.router.navigate('/lobby'),1500);
             // create the document
             }
           });

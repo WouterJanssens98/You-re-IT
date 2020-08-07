@@ -26,6 +26,7 @@ export default () => {
   App.render(homeTemplate({ title }));
 
   App.firebase.isLoggedIn();
+ 
 
   App.firebase.getAuth().onAuthStateChanged(async (user) => {
     if (user) {
@@ -37,8 +38,12 @@ export default () => {
     const playerdiv = document.getElementsByClassName('o-lobbyform')[0];
     const title = document.getElementsByClassName('m-landing__subtitle2')[0];
     const gamestatus = document.getElementsByClassName('m-landing__subtitle3')[0];
+    const quitGame = document.getElementById('leavetext');
     title.innerHTML += ` (${gamecode})`;
-    
+
+    App.firebase.getGameStatus(gamecode,useruid);
+
+
     function getCurrentPlayers(gamecode){
         App.firebase.getFirestore().collection("users").where("lobbycode", "==", gamecode)
         .onSnapshot(function(querySnapshot) {
@@ -63,35 +68,45 @@ export default () => {
 
     };
 
-    function checkIfAdminOfGame(useruid){
-        const docRef = App.firebase.getFirestore().collection("game").doc(gamecode)
-
-        docRef.get().then(function(doc) {
-          if (doc.exists) {
-              if(useruid === doc.data().host){
-                gamestatus.innerHTML = "Waiting for you to start the game";
-                console.log("The current user is the host of this game!")
-              } else {
-                console.log("The current user is not the host of this game")
-              }
-          } else {
-              // doc.data() will be undefined in this case
-              console.log("No such document!");
-          }
-        }).catch(function(error) {
-          console.log("Error getting document:", error);
-        });
-
+    /*
+    function getGameStatus(gamecode){
+      const gameRef = App.firebase.getFirestore().collection('game').doc(gamecode)
+      gameRef.get()
+      .then((docSnapshot) => {
+        if (docSnapshot.exists) {
+          gameRef.onSnapshot((doc) => {
+            const status = doc.data().result;
+            if(status === "stopped"){
+              App.firebase.leaveGame(info.uid);
+              window.alert("This game has been stopped by the host")
+            }
+          });
+        }
+      });
+    };
+    */
+    
+    const host = await App.firebase.isAdmin(gamecode,useruid)
+    if(host){
+      gamestatus.innerHTML = "Waiting for you to start the game";
+      quitGame.innerHTML = "      End game"
     }
 
-    checkIfAdminOfGame(useruid)
 
     getCurrentPlayers(gamecode)
+    // getGameStatus(gamecode)
 
 
 
     document.getElementById('leave').addEventListener('click', () => {
-        App.firebase.leaveGame(info.uid);
+      if(host){
+        const gameRef = App.firebase.getFirestore().collection('game').doc(gamecode);
+        const setWithMerge = gameRef.set({
+          result: 'stopped',
+        }, { merge: true });
+        
+      }
+      App.firebase.leaveGame(info.uid);
         
       
 

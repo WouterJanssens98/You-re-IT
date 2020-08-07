@@ -67,14 +67,54 @@ class FireBase {
     }));
   }
 
+  isAdmin(gamecode,useruid){
+    const docRef = this.getFirestore().collection("game").doc(gamecode)
+    return new Promise(((resolve, reject) => {
+      docRef.get().then(function(doc) {
+        if (doc.exists) {
+            if(useruid === doc.data().host){
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document:", error);
+      });
+    }));
+   
+}
+
   leaveGame(uid) {
     const gameRef = this.getFirestore().collection("users").doc(uid);
-
+    const router = new Router(window.location.origin, consts.ROUTER_HASH);
     const setWithMerge = gameRef.set({
       lobbycode: ""
     }, { merge: true });
+    setTimeout(router.navigate('/homepage'),1000);
   
   }
+
+  getGameStatus(gamecode,uid){
+    const gameRef = this.getFirestore().collection('game').doc(gamecode)
+    gameRef.get()
+    .then((docSnapshot) => {
+      if (docSnapshot.exists) {
+        gameRef.onSnapshot((doc) => {
+          const status = doc.data().result;
+          if(status === "stopped"){
+            this.leaveGame(uid);
+            window.alert("This game has been stopped by the host")
+          }
+        });
+      }
+    });
+  };
+
+
 }
 
 export default FireBase;
