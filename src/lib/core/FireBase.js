@@ -146,7 +146,6 @@ class FireBase {
       lat: lat,
       long: long
     }, { merge: true });
-    console.log("Successfully updated user location")
   }
 
 
@@ -158,6 +157,8 @@ class FireBase {
         gameRef.onSnapshot((doc) => {
           const status = doc.data().result;
           if(status === "created"){
+            this.updateUserLocation(lat,long,uid)
+          } else if(status === "running"){
             this.updateUserLocation(lat,long,uid)
           }
         });

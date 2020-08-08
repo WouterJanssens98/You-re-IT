@@ -9,17 +9,22 @@
  */
 
 
-// TODO : players have to join before the admin starts the game for the game to properly render them( fix this )
-// TODO : add the tagging logic and save this to the database (to keep track which player was tagged last)
-// TODO : add timer to game on top (tried multiple options, every single one failed)
-// TODO : add sounds?
-// TODO : ...
+
 
 
 import { MAPBOX_API_KEY } from '../consts';
 import MapBox from '../lib/core/MapBox';
 import App from '../lib/App';
 import Dataseeder from '../lib/core/dataseeder';
+
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+import 'firebase/analytics';
+import Router from '../lib/core/Router';
+import * as consts from '../consts';
+
+
 
 
 const mapboxTemplate = require('../templates/mapbox.hbs');
@@ -67,6 +72,11 @@ export default () => {
     
       const gamecode = info.lobbycode;
       const useruid = info.uid;
+      const team = info.team
+
+      if(team == "admin"){
+        document.getElementById('mapbox-exit').innerHTML = "End Game"
+      }
 
       function success(position) {
         const lat  = position.coords.latitude;
@@ -83,18 +93,12 @@ export default () => {
           console.log("Geolocation is not supported by this browser.")
           
         } else {
-          navigator.geolocation.getCurrentPosition(success, error);
+          navigator.geolocation.getCurrentPosition(success, error,{timeout:10000});
         }
       }
   
-      
-
-      // set current lobby code to in game header
-      
-
-      // get the current max allowed players from db
-      
-
+      setInterval(update,5000)
+   
 
       const gameInfo = await App.firebase.getGameInfo(gamecode);
 
@@ -106,24 +110,11 @@ export default () => {
 
       document.getElementById('invitecode').innerHTML += gamecode;
       document.getElementById('playtime').innerHTML += `${gameDuration} minutes`;
-      //  document.getElementById('players').innerHTML = `Players : ${amountOfPlayers} players`;
-
-
-      // get current user's location
-      
-
+     
 
       if (MAPBOX_API_KEY !== '') {
         // eslint-disable-next-line no-unused-vars
         const mapBox = new MapBox(MAPBOX_API_KEY, mapBoxOptions);
-
-        // Render the admin first
-
-        // mapBox.addAdminPicture(position[0], position[1], username, 'bad');
-
-        // then render the players that join (for the purpose of testing this exercise, every player that joins gets the same location
-
-
         async function renderJoined() {
           await App.firebase.getFirestore().collection('users').where('lobbycode', '==', gamecode)
             .get()
@@ -150,7 +141,6 @@ export default () => {
         App.firebase.getFirestore().collection("users").where("lobbycode", "==", gamecode)
         .onSnapshot(function(querySnapshot) {
         userlist = [];
-        console.log('Amount of users changed!')
         querySnapshot.forEach(function(doc) {
           userlist.push(doc.get('uid'));
           let name = doc.get('name');
@@ -166,41 +156,14 @@ export default () => {
           }else{
             // do nothing, player has no type specified
           }
-          console.log("rendered players")
         });
-        console.log("New amount of users : " + userlist.length)
         });
   
       };
 
-      function success(position) {
-        const lat  = position.coords.latitude;
-        const long = position.coords.longitude;
-        App.firebase.updatePosition(gamecode, useruid,long,lat);
-      }
-  
-      function error() {
-        console.log('Unable to retrieve your location');
-      }
-  
-      function update(){
-        if (!navigator.geolocation) {
-          console.log("Geolocation is not supported by this browser.")
-          
-        } else {
-          navigator.geolocation.getCurrentPosition(success, error);
-        }
-      }
-
-      update()
-      //renderJoined()
       getCurrentPlayers()
-      setInterval(update, 5000)
-
-     
-      setInterval(update, 2500)
+      
       setInterval(async () => {
-        console.log("starting location update!")
         const users = []
         await App.firebase.getFirestore().collection('users').where('lobbycode', '==', gamecode)
           .get()
@@ -209,8 +172,6 @@ export default () => {
               users.push(doc.get('uid'))
             });
           });
-        console.log("test")
-        console.log(users)
         let x = 0;
         let y = 0;
         for (let j = 0; j < users.length  ; j++) {
@@ -229,18 +190,13 @@ export default () => {
           };
           // eslint-disable-next-line prefer-const
           let userinfo = await App.firebase.getUserInfo(userlist[j])
-          console.log(userinfo.uid)
-          console.log(userinfo.long, userinfo.lat)
           data.features[0].geometry.coordinates = [userinfo.long, userinfo.lat];
           if(mapBox.map.getSource(userinfo.uid)){
 
           mapBox.map.getSource(userinfo.uid).setData(data);
-          console.log("Set new data for uid: " + userinfo.uid)
           } else {
-          console.log("user doesnt exist yet! adding picture!")
           mapBox.addPicture(userinfo.long, userinfo.lat, userinfo.uid, 'good');
           }
-          console.log("data set!")
           renderJoined();
         }
       }, 5000);
@@ -265,16 +221,39 @@ export default () => {
   });
 
   document.getElementById('mapbox-exit').addEventListener('click', () => {
-    console.log('Stopping game means resulting in a loss for the host!');
     clearInterval();
-
     App.firebase.getAuth().onAuthStateChanged(async (user) => {
       if (user) {
-        const game = App.firebase.getFirestore().collection('users').doc(user.uid).lobbycode;
-        const resultRef = App.firebase.getFirestore().collection('game').doc(game);
+        const info = await App.firebase.getUserInfo(user.uid);
+        const timestamp = String(Date.now())
+        const gamecode = info.lobbycode;
+        const useruid = info.uid;
+        const result = info.type == "tikker" ? "lost" : "won";
+        const gameRef = App.firebase.getFirestore().collection('game').doc(gamecode);
+        const historyRef = App.firebase.getFirestore().collection('history').doc(timestamp);
+        const userRef = App.firebase.getFirestore().collection('users').doc(useruid);
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const yyyy = today.getFullYear();
 
-        const setWithMerge = resultRef.set({
-          result: 'lost',
+        const vandaag = mm + '/' + dd + '/' + yyyy;
+
+
+        const setGameWithMerge = gameRef.set({
+          result: 'stopped',
+        }, { merge: true });
+
+        const setHistoryWithMerge = historyRef.set({
+          result : result,
+          user : useruid,
+          date : vandaag
+        });
+
+        const setUserWithMerge = userRef.set({
+          lobbycode: '',
+          team : '',
+          type : ''
         }, { merge: true });
       }
     });

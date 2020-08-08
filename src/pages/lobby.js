@@ -100,12 +100,38 @@ export default () => {
         console.log("Geolocation is not supported by this browser.")
         
       } else {
-        navigator.geolocation.getCurrentPosition(success, error);
+        navigator.geolocation.getCurrentPosition(success, error,{timeout:10000});
       }
     }
 
-    update()
-    setInterval(update, 5000)
+    setInterval(update,5000)
+    
+
+    /*
+    function geolocFail(){
+      console.log("Getting Geolocation failed...")
+    }
+
+   if (navigator.geolocation) {
+    var location_timeout = setTimeout("geolocFail()", 10000);
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+        clearTimeout(location_timeout);
+
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        console.log("Updating Firestore...")
+        App.firebase.updatePosition(gamecode, useruid,lng,lat);
+    }, function(error) {
+        clearTimeout(location_timeout);
+        geolocFail();
+    });
+    } else {
+    // Fallback for no geolocation
+    geolocFail();
+    }
+    */
+
 
 
 
