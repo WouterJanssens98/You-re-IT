@@ -40,6 +40,7 @@ export default () => {
                 const setWithMerge = userRef.set({
                   lobbycode: invitedcode,
                   team: 'player',
+                  type: 'speler',
                   location: '3.675972 , 51.088436',
                 }, { merge: true });
                 localStorage.setItem('gamecode', JSON.stringify(invitedcode))

@@ -32,7 +32,6 @@ export default () => {
       document.getElementById('signedinUser').innerHTML = user.email;
 
       const username = user.email.substring(0, user.email.indexOf('@'));
-      console.log(`Ingelogd met ${user.email}`);
 
       // check if firestore entry exists
       const usersRef = App.firebase.getFirestore().collection('users').doc(user.uid);
@@ -45,17 +44,18 @@ export default () => {
           } else {
             // create the document
             // eslint-disable-next-line no-inner-declarations
-            function addUser(name, location, lobbycode, uid, team) {
+            function addUser(name, long, lat, lobbycode, uid, team) {
               usersRef.set({
                 name,
-                location,
+                long,
+                lat,
                 lobbycode,
                 uid,
                 team,
               });
             }
-            addUser(username, '', '', user.uid, '');
-            console.log(`${user.uid} was added to Firestore`);
+            addUser(username, '', '', '', user.uid, '');
+            console.log(`${user.email} was added to Firestore`);
           }
         });
     } else {

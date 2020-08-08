@@ -33,7 +33,8 @@ function addUser(name, location, lobbycode, uid, team) {
     const usersRef = App.firebase.getFirestore().collection('users').doc(userUID);
     usersRef.set({
         name,
-        location,
+        long,
+        lat,
         lobbycode,
         uid,
         team,

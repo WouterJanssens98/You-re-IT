@@ -51,7 +51,7 @@ class FireBase {
     }
   }
 
-  getUserInfo(uid) {
+  async getUserInfo(uid) {
     const locationRef = this.getFirestore().collection('users').doc(uid);
     return new Promise(((resolve, reject) => {
       locationRef.get()
@@ -67,7 +67,7 @@ class FireBase {
     }));
   }
 
-  isAdmin(gamecode,useruid){
+  async isAdmin(gamecode,useruid){
     const docRef = this.getFirestore().collection("game").doc(gamecode)
     return new Promise(((resolve, reject) => {
       docRef.get().then(function(doc) {
@@ -94,34 +94,99 @@ class FireBase {
     const setWithMerge = gameRef.set({
       lobbycode: ""
     }, { merge: true });
-    setTimeout(router.navigate('/homepage'),1000);
+    setTimeout(() => { router.navigate('/homepage'); }, 500)
   
   }
 
   getGameStatus(gamecode,uid){
     const gameRef = this.getFirestore().collection('game').doc(gamecode)
+    const router = new Router(window.location.origin, consts.ROUTER_HASH);
     gameRef.get()
     .then((docSnapshot) => {
       if (docSnapshot.exists) {
         gameRef.onSnapshot((doc) => {
           const status = doc.data().result;
           if(status === "stopped"){
-            this.leaveGame(uid);
             window.alert("This game has been stopped by the host")
+            this.leaveGame(uid);
+           
           }
           else if(status === "running"){
-            setTimeout(router.navigate('/mapbox'),1000);
+            setTimeout(() => { router.navigate('/mapbox'); }, 500)
           }
           else if(status === "finished"){
             window.alert("The game has finished. Thanks for playing!")
-            setTimeout(router.navigate('/homepage'),1000);
+            setTimeout(() => { router.navigate('/homepage'); }, 500)
+          }
+          else if(status === "created"){
+            // do nothing, game was just created
+          }
+        });
+      }
+    });
+  };
+  async getUserLocation(uid){
+    const userRef = this.getFirestore().collection('users').doc(uid)
+    return new Promise(((resolve, reject) => {
+      userRef.get()
+        .then((docSnapshot) => {
+          if (docSnapshot.exists) {
+            userRef.onSnapshot((doc) => {
+              const value = doc.data();
+              resolve(value);
+            });
+          }
+        });
+    }));
+    
+  }
+  updateUserLocation(lat,long,uid) {
+    const userRef = this.getFirestore().collection('users').doc(uid)
+    const setWithMerge = userRef.set({
+      lat: lat,
+      long: long
+    }, { merge: true });
+    console.log("Successfully updated user location")
+  }
+
+
+  updatePosition(gamecode,uid, long, lat){
+    const gameRef = this.getFirestore().collection('game').doc(gamecode)
+    gameRef.get()
+    .then((docSnapshot) => {
+      if (docSnapshot.exists) {
+        gameRef.onSnapshot((doc) => {
+          const status = doc.data().result;
+          if(status === "created"){
+            this.updateUserLocation(lat,long,uid)
           }
         });
       }
     });
   };
 
+  async getGameInfo(a) {
+    const newRef = this.getFirestore().collection('game').doc(a);
+    return new Promise(((resolve, reject) => {
+      newRef.get()
+        .then((docSnapshot) => {
+          if (docSnapshot.exists) {
+            newRef.onSnapshot((doc) => {
+              const value = doc.data();
+              resolve(value);
+            });
+          }
+        });
+    }));
+  }
 
-}
+  
+
+ 
+
+
+
+
+  }
 
 export default FireBase;

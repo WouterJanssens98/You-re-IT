@@ -210,10 +210,10 @@ export default () => {
             });
           });
         console.log("test")
-        console.log(users)
+        console.log(users.length)
         let x = 0;
         let y = 0;
-        for (let j = 0; j < users.length  ; j++) {
+        for (let j = 0; j < userlist.length - 1 ; j++) {
           let data = {
             type: 'FeatureCollection',
             features: [
@@ -229,17 +229,8 @@ export default () => {
           };
           // eslint-disable-next-line prefer-const
           let userinfo = await App.firebase.getUserInfo(userlist[j])
-          console.log(userinfo.uid)
-          console.log(userinfo.long, userinfo.lat)
           data.features[0].geometry.coordinates = [userinfo.long, userinfo.lat];
-          if(mapBox.map.getSource(userinfo.uid)){
-
           mapBox.map.getSource(userinfo.uid).setData(data);
-          console.log("Set new data for uid: " + userinfo.uid)
-          } else {
-          console.log("user doesnt exist yet! adding picture!")
-          mapBox.addPicture(userinfo.long, userinfo.lat, userinfo.uid, 'good');
-          }
           console.log("data set!")
           renderJoined();
         }

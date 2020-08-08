@@ -10,6 +10,8 @@ import App from '../lib/App';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/analytics';
+import Router from '../lib/core/Router';
+import * as consts from '../consts';
 import Dataseeder from '../lib/core/dataseeder';
 import game from './game';
 import player from './player';
@@ -26,7 +28,8 @@ export default () => {
   App.render(homeTemplate({ title }));
 
   App.firebase.isLoggedIn();
- 
+  
+
 
   App.firebase.getAuth().onAuthStateChanged(async (user) => {
     if (user) {
@@ -73,12 +76,36 @@ export default () => {
     const host = await App.firebase.isAdmin(gamecode,useruid)
     if(host){
       gamestatus.innerHTML = "Waiting for you to start the game";
-      quitGame.innerHTML = "      End game"
+      quitGame.innerHTML = "      End game";
+      document.getElementsByClassName('o-lobbyform2')[0].style.visibility = 'visible';
     }
 
 
-    getCurrentPlayers(gamecode)
-    // getGameStatus(gamecode)
+    getCurrentPlayers(gamecode);
+    
+    
+    
+    function success(position) {
+      const lat  = position.coords.latitude;
+      const long = position.coords.longitude;
+      App.firebase.updatePosition(gamecode, useruid,long,lat);
+    }
+
+    function error() {
+      console.log('Unable to retrieve your location');
+    }
+
+    function update(){
+      if (!navigator.geolocation) {
+        console.log("Geolocation is not supported by this browser.")
+        
+      } else {
+        navigator.geolocation.getCurrentPosition(success, error);
+      }
+    }
+
+    update()
+    setInterval(update, 5000)
 
 
 
@@ -94,7 +121,13 @@ export default () => {
     });
 
     document.getElementsByClassName('o-lobbyform2')[0].addEventListener('click', () => {
-      window.alert('Started')
+      const router = new Router(window.location.origin, consts.ROUTER_HASH);
+      const gameRef = App.firebase.getFirestore().collection('game').doc(gamecode);
+        const setWithMerge = gameRef.set({
+          result: 'running',
+          tikker: useruid
+        }, { merge: true });
+      setTimeout(() => { router.navigate('/mapbox'); }, 500)
     })
 
 

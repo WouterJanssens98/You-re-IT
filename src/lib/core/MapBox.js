@@ -33,6 +33,20 @@ class MapBox {
     return this.map;
   }
 
+  removeLayer(map, layerId){
+    if (map.getLayer(layerId)) {
+      map.removeLayer(layerId);
+    }
+  };
+
+  removeSource(map, sourceId){
+    if (map.getSource(sourceId)) {
+      map.removeSource(sourceId);
+    }
+  };
+
+
+
   addMarker(lat, lon, name) {
     this.map.on('load', () => {
       this.map.addLayer({
@@ -144,6 +158,40 @@ class MapBox {
       );
     });
   }
+
+  updatePicture(lat, lon, name, type) {
+    this.map.addLayer({
+      id: name,
+      type: 'symbol',
+      source: {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: [
+            {
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: [lat, lon],
+              },
+            },
+          ],
+        },
+      },
+      layout: {
+        'icon-image': type,
+        'icon-size': 0.07,
+        'text-field': name,
+        'symbol-placement': 'point',
+        'text-anchor': 'bottom',
+        'text-offset': [0, -1],
+        'text-allow-overlap': true,
+        'icon-allow-overlap': true,
+      },
+    });
+  }
+
+
 }
 
 export default MapBox;
