@@ -98,6 +98,38 @@ class FireBase {
   
   }
 
+  async setGameHistory(uid){
+    const info = await this.getUserInfo(uid);
+    const timestamp = String(Date.now())
+    const gamecode = info.lobbycode;
+    const useruid = info.uid;
+    const result = info.type == "tikker" ? "lost" : "won";
+    const historyRef = this.getFirestore().collection('history').doc(timestamp);
+    const userRef = this.getFirestore().collection('users').doc(useruid);
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+
+    const vandaag = mm + '/' + dd + '/' + yyyy;
+
+
+    const setHistoryWithMerge = historyRef.set({
+      result : result,
+      user : useruid,
+      date : vandaag
+    });
+
+    const setUserWithMerge = userRef.set({
+      lobbycode: '',
+      team : '',
+      type : ''
+    }, { merge: true });
+    
+  }
+
+  
+
   getGameStatus(gamecode,uid){
     const gameRef = this.getFirestore().collection('game').doc(gamecode)
     const router = new Router(window.location.origin, consts.ROUTER_HASH);
@@ -108,14 +140,15 @@ class FireBase {
           const status = doc.data().result;
           if(status === "stopped"){
             window.alert("This game has been stopped by the host")
+            this.setGameHistory(uid)
             this.leaveGame(uid);
-           
           }
           else if(status === "running"){
             setTimeout(() => { router.navigate('/mapbox'); }, 500)
           }
           else if(status === "finished"){
             window.alert("The game has finished. Thanks for playing!")
+            this.setGameHistory(uid)
             setTimeout(() => { router.navigate('/homepage'); }, 500)
           }
           else if(status === "created"){
@@ -125,6 +158,9 @@ class FireBase {
       }
     });
   };
+
+ 
+
   async getUserLocation(uid){
     const userRef = this.getFirestore().collection('users').doc(uid)
     return new Promise(((resolve, reject) => {
@@ -140,6 +176,8 @@ class FireBase {
     }));
     
   }
+
+
   updateUserLocation(lat,long,uid) {
     const userRef = this.getFirestore().collection('users').doc(uid)
     const setWithMerge = userRef.set({

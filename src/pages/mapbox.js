@@ -224,6 +224,7 @@ export default () => {
     clearInterval();
     App.firebase.getAuth().onAuthStateChanged(async (user) => {
       if (user) {
+
         const info = await App.firebase.getUserInfo(user.uid);
         const timestamp = String(Date.now())
         const gamecode = info.lobbycode;
@@ -244,6 +245,7 @@ export default () => {
           result: 'stopped',
         }, { merge: true });
 
+        /*
         const setHistoryWithMerge = historyRef.set({
           result : result,
           user : useruid,
@@ -255,6 +257,7 @@ export default () => {
           team : '',
           type : ''
         }, { merge: true });
+        */
       }
     });
     App.router.navigate('homepage');
