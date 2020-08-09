@@ -128,6 +128,21 @@ class FireBase {
     
   }
 
+  async getGameHistory(uid){
+    const userRef = this.getFirestore().collection('history').where("user", "==", uid)
+    return new Promise(((resolve, reject) => {
+      userRef.get()
+        .then((docSnapshot) => {
+          if (docSnapshot.exists) {
+            userRef.onSnapshot((doc) => {
+              const value = doc.data();
+              resolve(value);
+            });
+          }
+        });
+    }));
+  }
+
   
 
   getGameStatus(gamecode,uid){

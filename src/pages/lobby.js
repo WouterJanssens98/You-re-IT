@@ -107,34 +107,6 @@ export default () => {
     setInterval(update,5000)
     
 
-    /*
-    function geolocFail(){
-      console.log("Getting Geolocation failed...")
-    }
-
-   if (navigator.geolocation) {
-    var location_timeout = setTimeout("geolocFail()", 10000);
-
-    navigator.geolocation.getCurrentPosition(function(position) {
-        clearTimeout(location_timeout);
-
-        var lat = position.coords.latitude;
-        var lng = position.coords.longitude;
-        console.log("Updating Firestore...")
-        App.firebase.updatePosition(gamecode, useruid,lng,lat);
-    }, function(error) {
-        clearTimeout(location_timeout);
-        geolocFail();
-    });
-    } else {
-    // Fallback for no geolocation
-    geolocFail();
-    }
-    */
-
-
-
-
     document.getElementById('leave').addEventListener('click', () => {
       if(host){
         const gameRef = App.firebase.getFirestore().collection('game').doc(gamecode);
@@ -155,6 +127,20 @@ export default () => {
         }, { merge: true });
       setTimeout(() => { router.navigate('/mapbox'); }, 500)
     })
+
+    const copyBtn = document.getElementById('copy')
+
+    copyBtn.onclick = function() {
+      document.execCommand("copy")
+    }
+    copyBtn.addEventListener("copy", function(event) {
+      event.preventDefault();
+      if (event.clipboardData) {
+        event.clipboardData.setData("text/plain", gamecode);
+       alert(`Copied invite code : ${event.clipboardData.getData("text")}`)
+
+      }
+    });
 
 
 }})};

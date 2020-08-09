@@ -13,6 +13,7 @@
     width: 40%;
     margin: auto;
     margin-top: 10px;
+    margin-bottom: 15px;
     background-color: $button-hover;
     height: 50px;
     border-radius: $gutter;
@@ -21,4 +22,20 @@
     justify-content: center;
     text-decoration: none;
     visibility : hidden;
+    padding-bottom: 0px;
+}
+
+.o-lobbyform3{
+    width: 40%;
+    margin: auto;
+    margin-top: 0px;
+    padding-top: 0px;
+    background-color: $button-hover;
+    height: 50px;
+    border-radius: $gutter;
+    box-shadow: 5px 5px 12px #888888;
+    text-align: center;
+    justify-content: center;
+    text-decoration: none;
+    color :white
 }
