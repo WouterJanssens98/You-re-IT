@@ -37,13 +37,7 @@ export default () => {
   App.render(mapboxTemplate({ title }));
 
   App.firebase.isLoggedIn();
-  
-  
-
-
-  // create a new MapBox instance
-  // NOTE: make sure the HTML is rendered before making an instance of MapBox
-  // (it needs an element to render)
+  clearInterval();
 
   App.firebase.getAuth().onAuthStateChanged(async (user) => {
     if (user) {
@@ -65,11 +59,8 @@ export default () => {
         zoom: 12.5,
       };
 
-      // set username to use in mapbox
-      const username = user.email.substring(0, user.email.indexOf('@'));
-
+      // Get user info
       const info = await App.firebase.getUserInfo(user.uid);
-    
       const gamecode = info.lobbycode;
       const useruid = info.uid;
       const team = info.team
@@ -77,6 +68,7 @@ export default () => {
       if(team == "admin"){
         document.getElementById('mapbox-exit').innerHTML = "End Game"
       }
+
 
       function success(position) {
         const lat  = position.coords.latitude;
@@ -96,13 +88,14 @@ export default () => {
           navigator.geolocation.getCurrentPosition(success, error,{timeout:10000});
         }
       }
-  
+      
+      // push latest location every 5 seconds to Firestore
+
+
       setInterval(update,5000)
    
 
       const gameInfo = await App.firebase.getGameInfo(gamecode);
-
-
       const gameDuration = gameInfo.duration
       const gamePlayers = gameInfo.players
       const gameHost = gameInfo.host
@@ -115,29 +108,8 @@ export default () => {
       if (MAPBOX_API_KEY !== '') {
         // eslint-disable-next-line no-unused-vars
         const mapBox = new MapBox(MAPBOX_API_KEY, mapBoxOptions);
-        async function renderJoined() {
-          await App.firebase.getFirestore().collection('users').where('lobbycode', '==', gamecode)
-            .get()
-            .then((querySnapshot) => {
-              querySnapshot.forEach((doc) => {
-                let name = doc.get('name');
-                let long = doc.get('long');
-                let lat = doc.get('lat');
-                let team = doc.get('team')
-                let type = doc.get('type')
-                if(type == 'speler'){
-                  mapBox.addPicture(long, lat, name, 'good');
-                }else if(type == 'tikker'){
-                  mapBox.addPicture(long, lat, name, 'bad');
-                }else{
-                  // do nothing, player has no type specified
-                }
-              });
-            });
-        }
         var userlist = [];
         async function getCurrentPlayers(){
-          
         App.firebase.getFirestore().collection("users").where("lobbycode", "==", gamecode)
         .onSnapshot(function(querySnapshot) {
         userlist = [];
@@ -172,6 +144,7 @@ export default () => {
               users.push(doc.get('uid'))
             });
           });
+        getCurrentPlayers()
         let x = 0;
         let y = 0;
         for (let j = 0; j < users.length  ; j++) {
@@ -189,17 +162,17 @@ export default () => {
             ],
           };
           // eslint-disable-next-line prefer-const
-          let userinfo = await App.firebase.getUserInfo(userlist[j])
+          let userinfo = await App.firebase.getUserInfo(users[j])
           data.features[0].geometry.coordinates = [userinfo.long, userinfo.lat];
           if(mapBox.map.getSource(userinfo.uid)){
-
           mapBox.map.getSource(userinfo.uid).setData(data);
           } else {
           mapBox.addPicture(userinfo.long, userinfo.lat, userinfo.uid, 'good');
           }
-          renderJoined();
+          ;
         }
       }, 5000);
+
       }
     } else {
       App.router.navigate('homepage');
@@ -241,23 +214,21 @@ export default () => {
         const vandaag = mm + '/' + dd + '/' + yyyy;
 
 
+        const setHistoryWithMerge = historyRef.set({
+          result : "lost",
+          user : useruid,
+          date : vandaag
+        });
+        
+
+        if(info.team == "admin"){
         const setGameWithMerge = gameRef.set({
           result: 'stopped',
         }, { merge: true });
 
-        /*
-        const setHistoryWithMerge = historyRef.set({
-          result : result,
-          user : useruid,
-          date : vandaag
-        });
-
-        const setUserWithMerge = userRef.set({
-          lobbycode: '',
-          team : '',
-          type : ''
-        }, { merge: true });
-        */
+        } else if(info.team == "speler"){
+          App.firebase.leaveGame(useruid)
+        }
       }
     });
     App.router.navigate('homepage');

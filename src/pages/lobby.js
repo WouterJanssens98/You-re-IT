@@ -104,7 +104,7 @@ export default () => {
       }
     }
 
-    setInterval(update,5000)
+    // setInterval(update,5000)
     
 
     document.getElementById('leave').addEventListener('click', () => {
@@ -123,7 +123,8 @@ export default () => {
       const gameRef = App.firebase.getFirestore().collection('game').doc(gamecode);
         const setWithMerge = gameRef.set({
           result: 'running',
-          tikker: useruid
+          tikker: useruid,
+          cooldown : 'inactive'
         }, { merge: true });
       setTimeout(() => { router.navigate('/mapbox'); }, 500)
     })
