@@ -104,7 +104,7 @@ export default () => {
       }
     }
 
-    // setInterval(update,5000)
+    setInterval(update,2500)
     
 
     document.getElementById('leave').addEventListener('click', () => {

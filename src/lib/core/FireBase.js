@@ -212,7 +212,7 @@ class FireBase {
   async CheckDistanceToTikker(lat1, lon1, lat2, lon2, unit){
     console.log(lat1, lon1, lat2, lon2, unit)
     if ((lat1 == lat2) && (lon1 == lon2)) {
-      return 1;
+      return 9999;
     }
     else {
       var radlat1 = Math.PI * lat1/180;
@@ -264,6 +264,10 @@ class FireBase {
     const gameRef = this.getFirestore().collection('game').doc(gamecode)
     const info = await this.getGameInfo(gamecode);
     const info2 = await this.getUserInfo(uid)
+    const setGameMerge = userRef.set({
+      long : long,
+      lat : lat
+    }, { merge: true });
   }
 
   async deactivateCooldown(gamecode) {
@@ -333,6 +337,7 @@ class FireBase {
 
 
   updatePosition(gamecode,uid, long, lat){
+    console.log(`Long and lat is : ${long} , ${lat}`);
     const gameRef = this.getFirestore().collection('game').doc(gamecode)
     gameRef.get()
     .then((docSnapshot) => {

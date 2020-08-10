@@ -3,7 +3,7 @@ import './styles/styles.scss';
 import * as consts from './consts';
 import App from './lib/App';
 import routes from './routes';
-
+import 'regenerator-runtime/runtime'
 /**
  * This function will initialize our app
  */
