@@ -12,6 +12,7 @@ import History from './pages/history';
 import Admingame from './pages/admingame';
 import Playergame from './pages/playergame';
 import Lobby from './pages/lobby';
+import Offline from './pages/offline';
 
 
 export default [
@@ -28,4 +29,5 @@ export default [
   { path: '/admingame', view: Admingame },
   { path: '/playergame', view: Playergame },
   { path : '/lobby', view: Lobby},
+  { path : '/offline', view: Offline}
 ];

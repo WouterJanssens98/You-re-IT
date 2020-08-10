@@ -21,6 +21,9 @@
     "Vanilla"
   ],
   "author": "Wouter Janssens",
+  "browserslist": [
+    "since 2017-06"
+  ],
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.6.0",
