@@ -153,6 +153,13 @@ class FireBase {
     }));
   }
 
+  async setPlayerType(uid, type){
+    const userRef = this.getFirestore().collection('users').doc(uid)
+    const setGameWithMerge = userRef.set({
+      type : type
+    }, { merge: true });
+  }
+
   
 
   getGameStatus(gamecode,uid){
@@ -202,9 +209,10 @@ class FireBase {
     
   }
 
-  CheckDistanceToTikker(lat1, lon1, lat2, lon2, unit){
+  async CheckDistanceToTikker(lat1, lon1, lat2, lon2, unit){
+    console.log(lat1, lon1, lat2, lon2, unit)
     if ((lat1 == lat2) && (lon1 == lon2)) {
-      return 0;
+      return 1;
     }
     else {
       var radlat1 = Math.PI * lat1/180;
@@ -226,77 +234,93 @@ class FireBase {
   }
   async makePlayerTikker(gamecode,uid){
     const gameData = await this.getGameInfo(gamecode);
+    const userInfo = await this.getUserInfo(uid)
     const oldTikker = gameData.tikker;
-    const newTikker = uid;
+    const oldInfo = await this.getUserInfo(oldTikker)
     const gameRef = this.getFirestore().collection('game').doc(gamecode)
     const oldTikkerRef = this.getFirestore().collection('users').doc(oldTikker)
-    const newTikkerRef = this.getFirestore().collection('users').doc(newTikker)
-
-    // clear the old tikker's location from game debug
-
-    // change the type of player
-
-    const setGameWithMerge = gameRef.set({
-      tikkerLat : '',
-      tikkerLong : ''
-    }, { merge: true });
+    const newTikkerRef = this.getFirestore().collection('users').doc(uid)
 
 
     const setOldTikkerWithMerge = oldTikkerRef.set({
       type : 'speler'
     }, { merge: true });
     
-    
-    const setnewTikkerWithMerge = newTikkerRef.set({
-      type : 'tikker'
-    }, { merge: true })
+
+    const setGameWithMerge = gameRef.set({
+      tikker : uid,
+
+    }, { merge: true });
+
+    await this.setPlayerType(uid, 'tikker')
+    alert(`${oldInfo.name} heeft jou getikt! Jij bent aan de beurt.`)
+    console.log(`Nieuwe tikker! : ${userInfo.name}`)
+    setTimeout(() => { this.deactivateCooldown(gamecode) }, 10000)
+
   }
 
   async updateUserLocation(gamecode,lat,long,uid) {
     const userRef = this.getFirestore().collection('users').doc(uid)
     const gameRef = this.getFirestore().collection('game').doc(gamecode)
     const info = await this.getGameInfo(gamecode);
-    
-    const setUserMerge = userRef.set({
-      lat: lat,
-      long: long
-    }, { merge: true });
-    
-    userRef.get()
-    .then((docSnapshot) => {
-      if (docSnapshot.exists) {
-        userRef.onSnapshot((doc) => {
-          const type = doc.data().type;
-          const userLong = doc.data().long
-          const userLat = doc.data().lat
-          if(type == "tikker"){
-            const setGameMerge = gameRef.set({
-              tikkerLat : lat,
-              tikkerLong : long
-            }, { merge: true });
-          }else if(type == "speler"){
-            const tikkerLat = info.tikkerLat;
-            const tikkerLong = info.tikkerLong;
-            const distance = this.CheckDistanceToTikker(userLat,userLong, tikkerLat, tikkerLong, "K")
-            if(distance < 10){
-              if(info.cooldown == "active"){
-                // do nothing
-              }else if (info.cooldown == "inactive"){
-                console.log("getikt...")
-                const setNewMerge = gameRef.set({
-                  tikkerLat : '',
-                  tikkerLong : '',
-                  cooldown : 'active'
-                }, { merge: true });
-                this.makePlayerTikker(gamecode,uid)
-              }
-              
-            }
-          }
-        });
-      }
-    });
+    const info2 = await this.getUserInfo(uid)
   }
+
+  async deactivateCooldown(gamecode) {
+    console.log("Deactivating cooldown...")
+    const gameRef = this.getFirestore().collection('game').doc(gamecode)
+    const setNewestMerge = gameRef.set({
+      cooldown : 'inactive'
+    }, { merge: true });
+  }
+  async isTikked(gamecode,uid){
+    const gameRef = this.getFirestore().collection('game').doc(gamecode)
+    const userRef = this.getFirestore().collection('game').doc(uid)
+    const user = await this.getUserInfo(uid);
+    const tikker = await this.getGameInfo(gamecode);
+    const tikkerLong = tikker.tikkerLong;
+    const tikkerLat = tikker.tikkerLat;
+    const type = user.type;
+    const userLong = user.long;
+    const userLat = user.lat;
+    const distance = await this.CheckDistanceToTikker(userLat,userLong, tikkerLat, tikkerLong, "K")
+    if(type == "tikker"){
+      const setGameMerge = gameRef.set({
+        tikkerLat : userLat,
+        tikkerLong : userLong
+      }, { merge: true });
+      
+      if(distance < 10){
+        if(tikker.cooldown == "inactive"){
+          window.alert(`Proficiat! Je hebt een medespeler kunnen tikken`)
+        } else {
+          console.log("Cooldown is active for tikker...")
+        }
+      }      
+    }else if(type == "speler"){
+      if(distance < 10){
+        if(tikker.cooldown == "active"){
+          console.log("Cooldown is active for speler...")
+        }else if (tikker.cooldown == "inactive"){
+          console.log("getikt...")
+          const setNewMerge = gameRef.set({
+            tikkerLat : userLat,
+            tikkerLong : userLong,
+            cooldown : 'active'
+          }, { merge: true });
+
+          const setNewestMerge = userRef.set({
+            type : 'tikker'
+          }, { merge: true });
+
+          this.makePlayerTikker(gamecode,uid)
+        }
+      }
+    }
+  }
+
+  
+
 
   clearUserLocation(uid) {
     const userRef = this.getFirestore().collection('users').doc(uid)
@@ -329,7 +353,7 @@ class FireBase {
     });
   };
 
-  async getGameInfo(a) {
+  async getGameInfo(a){
     const newRef = this.getFirestore().collection('game').doc(a);
     return new Promise(((resolve, reject) => {
       newRef.get()

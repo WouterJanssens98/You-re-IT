@@ -25,7 +25,6 @@ export default () => {
   App.firebase.isLoggedIn();
 
   document.getElementById('startgame').addEventListener('click', () => {
-    console.log('joining game...');
     const invitedcode = document.getElementById('input_code').value;
     const codeRef = App.firebase.getFirestore().collection('game').doc(invitedcode);
     codeRef.get()
@@ -40,11 +39,14 @@ export default () => {
                 const setWithMerge = userRef.set({
                   lobbycode: invitedcode,
                   team: 'player',
-                  type: 'speler',
-                  location: '3.675972 , 51.088436',
                 }, { merge: true });
                 localStorage.setItem('gamecode', JSON.stringify(invitedcode))
-                App.router.navigate('/lobby');
+                const gamestatus  = await App.firebase.getGameInfo(invitedcode)
+                if(gamestatus.result == 'created'){
+                  await App.firebase.setPlayerType(user.uid, 'speler')
+                  App.router.navigate('/lobby');
+                  
+                }
                 //App.router.navigate('/mapbox');
               } else {
                 // niet ingelogd, verwerpen

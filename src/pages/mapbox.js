@@ -91,8 +91,11 @@ export default () => {
       
       // push latest location every 5 seconds to Firestore
 
-
-      setInterval(update,5000)
+      function start(){
+        App.firebase.isTikked(gamecode,useruid)
+      }
+      setInterval(update,10000)
+      setInterval(start, 15000)
    
 
       const gameInfo = await App.firebase.getGameInfo(gamecode);
