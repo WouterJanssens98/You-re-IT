@@ -118,7 +118,8 @@ class FireBase {
       const setHistoryWithMerge = await historyRef.set({
         result : result,
         user : useruid,
-        date : vandaag
+        date : vandaag,
+        gamecode : gamecode
       });
   
     } else if (status == "stopped"){
@@ -126,7 +127,8 @@ class FireBase {
       const setHistoryWithMerge = await historyRef.set({
         result : result,
         user : useruid,
-        date : vandaag
+        date : vandaag,
+        gamecode : gamecode
       });
   
     }

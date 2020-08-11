@@ -18,12 +18,22 @@ export default () => {
 
   App.firebase.isLoggedIn();
 
+  const hasPermisson = async () => {
+    const permission = await Notification.requestPermission();
+    return permission === 'granted';
+  };
+  
+  const showNotification = async () => {
+    // check if we have notification permission
+    const hasPermission = await hasPermisson();
+  }
+
   App.firebase.getAuth().onAuthStateChanged(async (user) => {
     if (user) {
     
     const historyDiv = document.getElementsByClassName('o-historyform-4')[0]
-    
-    function getGameHistory(uid){
+
+    async function getGameHistory(uid){
         App.firebase.getFirestore().collection("history").where("user", "==", uid)
         .onSnapshot(function(querySnapshot) {
         historyDiv.innerHTML ="";
@@ -31,12 +41,14 @@ export default () => {
         const wins = []
         const losses = []
         querySnapshot.forEach(function(doc) {
+            const otherplayers = [];
             if(doc.data().result == "lost"){
             losses.push(doc.data())
             } else if(doc.data().result == "won"){
             wins.push(doc.data())
             }
             games.push(doc.data());
+            const gamecode = doc.data().gamecode
             const line = document.createElement('div');
             const p1 = document.createElement('p');
             const p2 = document.createElement('p');
@@ -49,18 +61,27 @@ export default () => {
             line.appendChild(p2)
             historyDiv.appendChild(line)
         });
-        const winratio = Math.floor((wins.length / (wins.length + losses.length)) * 100);
         document.getElementById('count').innerHTML = `Games played : ${games.length}`
-        document.getElementById('ratio').innerHTML = `${winratio}% win ratio`
-        
-        });
+        if(games.length > 0){
+            const winratio = Math.floor((wins.length / (wins.length + losses.length)) * 100);
+            const requiredHeight = games.length * 65
+            historyDiv.style.height = `${requiredHeight}px`;
+            document.getElementById('ratio').innerHTML = `${winratio}% win ratio`
+        }else if(games.length === 0){
+            const line = document.createElement('div');
+            const p1 = document.createElement('p');
+            line.className = "m-history-game";
+            p1.className = "a-history-game_header";
+            p1.innerHTML = "No games played yet... start playing!"
+            line.appendChild(p1)
+            historyDiv.appendChild(line)
+            
+        }
+           
+        })
+    }
 
-    };
-
-    
-    getGameHistory(user.uid)
-
-    
+    await getGameHistory(user.uid)
 
 }}
   

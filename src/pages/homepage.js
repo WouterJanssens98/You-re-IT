@@ -21,6 +21,7 @@ export default () => {
   // render the template
   App.render(homeTemplate({ title }));
 
+  Notification.requestPermission();
 
   // eslint-disable-next-line no-shadow
 

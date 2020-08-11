@@ -241,7 +241,6 @@ export default () => {
         const useruid = info.uid;
         const result = info.type == "tikker" ? "lost" : "won";
         const gameRef = App.firebase.getFirestore().collection('game').doc(gamecode);
-        const historyRef = App.firebase.getFirestore().collection('history').doc(timestamp);
         const userRef = App.firebase.getFirestore().collection('users').doc(useruid);
         const today = new Date();
         const dd = String(today.getDate()).padStart(2, '0');
@@ -249,15 +248,7 @@ export default () => {
         const yyyy = today.getFullYear();
 
         const vandaag = mm + '/' + dd + '/' + yyyy;
-
-
-        const setHistoryWithMerge = historyRef.set({
-          result : "lost",
-          user : useruid,
-          date : vandaag
-        });
-        
-
+      
         if(info.team == "admin"){
         const setGameWithMerge = gameRef.set({
           result: 'stopped',
