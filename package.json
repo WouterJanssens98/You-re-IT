@@ -21,13 +21,6 @@
     "Vanilla"
   ],
   "author": "Wouter Janssens",
-  "browserslist": [
-    "last 3 and_chr versions",
-    "last 3 chrome versions",
-    "last 3 opera versions",
-    "last 3 ios_saf versions",
-    "last 3 safari versions"
-  ],
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.6.0",
@@ -71,8 +64,6 @@
     "mapbox-gl": "^1.6.1",
     "navigo": "^7.1.2",
     "random-location": "^1.1.2",
-    "regenerator-runtime": "^0.13.7",
-    "serviceworker-webpack-plugin": "^1.0.1",
-    "uuid": "^8.3.0"
+    "serviceworker-webpack-plugin": "^1.0.1"
   }
 }
