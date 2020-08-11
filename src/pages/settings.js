@@ -4,6 +4,8 @@
 
 
 import App from '../lib/App';
+import Router from '../lib/core/Router';
+import * as consts from '../consts';
 
 
 window.addEventListener('beforeunload', () => {
@@ -24,8 +26,6 @@ export default () => {
   
   App.firebase.isLoggedIn();
 
-  App.tools.darkmodeEnabled();
-
 
   const save = document.getElementById('savesetting');
   const checkbox = document.getElementById('checkbox');
@@ -41,14 +41,5 @@ export default () => {
     container.classList.add('o-landingpage');
   }
   // eslint-disable-next-line func-names
-  checkbox.addEventListener('click', (e) => {
-    console.log(checkbox.checked);
-    if(checkbox.checked === true ) {
-      console.log("trueee")
-      localStorage.setItem('darkmode', JSON.stringify(checkbox.checked));
-    }else if (checkbox.checked === false){
-      console.log("falseeee")
-      localStorage.setItem('darkmode' , JSON.stringify(checkbox.checked))
-    }
-  });
+  
 };

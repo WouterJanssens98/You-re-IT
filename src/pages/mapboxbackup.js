@@ -150,7 +150,6 @@ export default () => {
         App.firebase.getFirestore().collection("users").where("lobbycode", "==", gamecode)
         .onSnapshot(function(querySnapshot) {
         userlist = [];
-        console.log('Amount of users changed!')
         querySnapshot.forEach(function(doc) {
           userlist.push(doc.get('uid'));
           let name = doc.get('name');
@@ -166,9 +165,7 @@ export default () => {
           }else{
             // do nothing, player has no type specified
           }
-          console.log("rendered players")
         });
-        console.log("New amount of users : " + userlist.length)
         });
   
       };
@@ -200,7 +197,6 @@ export default () => {
      
       setInterval(update, 2500)
       setInterval(async () => {
-        console.log("starting location update!")
         const users = []
         await App.firebase.getFirestore().collection('users').where('lobbycode', '==', gamecode)
           .get()
@@ -209,8 +205,6 @@ export default () => {
               users.push(doc.get('uid'))
             });
           });
-        console.log("test")
-        console.log(users.length)
         let x = 0;
         let y = 0;
         for (let j = 0; j < userlist.length - 1 ; j++) {
@@ -231,7 +225,6 @@ export default () => {
           let userinfo = await App.firebase.getUserInfo(userlist[j])
           data.features[0].geometry.coordinates = [userinfo.long, userinfo.lat];
           mapBox.map.getSource(userinfo.uid).setData(data);
-          console.log("data set!")
           renderJoined();
         }
       }, 5000);
@@ -256,7 +249,6 @@ export default () => {
   });
 
   document.getElementById('mapbox-exit').addEventListener('click', () => {
-    console.log('Stopping game means resulting in a loss for the host!');
     clearInterval();
 
     App.firebase.getAuth().onAuthStateChanged(async (user) => {

@@ -11,7 +11,6 @@ function help(userUID){
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           return true
-          console.log("user is signed in!")
           var displayName = user.displayName;
           var email = user.email;
           var emailVerified = user.emailVerified;

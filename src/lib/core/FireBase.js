@@ -171,6 +171,11 @@ class FireBase {
         gameRef.onSnapshot(async (doc) => {
           const status = doc.data().result;
           if(status === "stopped"){
+            window.clearInterval(myInterval1)
+            window.clearInterval(myInterval2)
+            window.clearInterval(myInterval3)
+            window.clearInterval(myInterval4)
+            window.clearInterval(myInterval5)
             window.alert("This game has been stopped by the host")
             await this.setGameHistory(uid,status)
             this.leaveGame(uid)
@@ -180,6 +185,11 @@ class FireBase {
             setTimeout(() => { router.navigate('/mapbox'); }, 500)
           }
           else if(status === "finished"){
+            window.clearInterval(myInterval1)
+            window.clearInterval(myInterval2)
+            window.clearInterval(myInterval3)
+            window.clearInterval(myInterval4)
+            window.clearInterval(myInterval5)
             window.alert("The game has finished. Thanks for playing!")
             this.setGameHistory(uid,status)
             setTimeout(() => { router.navigate('/homepage'); }, 500)
@@ -210,7 +220,6 @@ class FireBase {
   }
 
   async CheckDistanceToTikker(lat1, lon1, lat2, lon2, unit){
-    console.log(lat1, lon1, lat2, lon2, unit)
     if ((lat1 == lat2) && (lon1 == lon2)) {
       return 9999;
     }
@@ -226,7 +235,6 @@ class FireBase {
       dist = Math.acos(dist);
       dist = dist * 180/Math.PI;
       dist = dist * 60 * 1.1515;
-      console.log(`Distance between :${dist}`);
       if (unit=="K") { dist = dist * 1.609344 }
       if (unit=="N") { dist = dist * 0.8684 }
       return dist;
@@ -254,7 +262,6 @@ class FireBase {
 
     await this.setPlayerType(uid, 'tikker')
     alert(`${oldInfo.name} heeft jou getikt! Jij bent aan de beurt.`)
-    console.log(`Nieuwe tikker! : ${userInfo.name}`)
     setTimeout(() => { this.deactivateCooldown(gamecode) }, 10000)
 
   }
@@ -271,7 +278,6 @@ class FireBase {
   }
 
   async deactivateCooldown(gamecode) {
-    console.log("Deactivating cooldown...")
     const gameRef = this.getFirestore().collection('game').doc(gamecode)
     const setNewestMerge = gameRef.set({
       cooldown : 'inactive'
@@ -298,15 +304,12 @@ class FireBase {
         if(tikker.cooldown == "inactive"){
           window.alert(`Proficiat! Je hebt een medespeler kunnen tikken`)
         } else {
-          console.log("Cooldown is active for tikker...")
         }
       }      
     }else if(type == "speler"){
       if(distance < 10){
         if(tikker.cooldown == "active"){
-          console.log("Cooldown is active for speler...")
         }else if (tikker.cooldown == "inactive"){
-          console.log("getikt...")
           const setNewMerge = gameRef.set({
             tikkerLat : userLat,
             tikkerLong : userLong,
@@ -337,7 +340,6 @@ class FireBase {
 
 
   updatePosition(gamecode,uid, long, lat){
-    console.log(`Long and lat is : ${long} , ${lat}`);
     const gameRef = this.getFirestore().collection('game').doc(gamecode)
     gameRef.get()
     .then((docSnapshot) => {

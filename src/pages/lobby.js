@@ -104,7 +104,7 @@ export default () => {
       }
     }
 
-    setInterval(update,2500)
+   window.myInterval5 = setInterval(update,2500)
     
 
     document.getElementById('leave').addEventListener('click', () => {
@@ -117,6 +117,7 @@ export default () => {
       }
       App.firebase.leaveGame(info.uid);
     });
+    
 
     document.getElementsByClassName('o-lobbyform2')[0].addEventListener('click', () => {
       const router = new Router(window.location.origin, consts.ROUTER_HASH);

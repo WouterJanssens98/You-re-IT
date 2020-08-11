@@ -11,7 +11,6 @@ const cacheName = `cache-${cacheVersion}`;
 const cacheFiles = [
   './app.js',
   './lib/App.js',
-  './lib/core/MapBox.js',
   './lib/core/LocalStorage.js',
   './lib/core/FireBase.js',
   './lib/core/Renderer.js',
@@ -21,6 +20,9 @@ const cacheFiles = [
   './assets/icons/players/goodplayer.png',
   './assets/icons/players/realplayer.png',
   './pages/offline.js',
+  './templates/admingame.hbs',
+  './templates/homepage.hbs',
+  './templates/playergame.hbs',
   './templates/offlinepage.hbs',
   './routes.js',
 
@@ -70,12 +72,27 @@ self.addEventListener('activate', e => {
 }); 
   
 // Call Fetch Event  
-self.addEventListener('fetch', e => { 
-    console.log('Service Worker: Fetching'); 
-    e.respondWith( 
-        // If there is no internet 
-        fetch(e.request).catch((error) => 
-            caches.match(cacheFiles) 
-        ) 
-    ); 
-}); 
+self.addEventListener('fetch', function(event) {
+
+    event.respondWith((async () => {
+  const cachedResponse = await caches.match(event.request);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  const response = await fetch(event.request);
+
+  if (!response || response.status !== 200 || response.type !== 'basic') {
+    return response;
+  }
+
+  if (ENABLE_DYNAMIC_CACHING) {
+    const responseToCache = response.clone();
+    const cache = await caches.open(DYNAMIC_CACHE)
+    await cache.put(event.request, response.clone());
+  }
+
+  return response;
+})());
+
+  }); 

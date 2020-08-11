@@ -37,7 +37,6 @@ export default () => {
   App.render(mapboxTemplate({ title }));
 
   App.firebase.isLoggedIn();
-  clearInterval();
 
   App.firebase.getAuth().onAuthStateChanged(async (user) => {
     if (user) {
@@ -94,8 +93,8 @@ export default () => {
       function start(){
         App.firebase.isTikked(gamecode,useruid)
       }
-      setInterval(update,10000)
-      setInterval(start, 15000)
+      window.myInterval1 = setInterval(update,10000)
+      window.myInterval2 = setInterval(start, 15000)
    
 
       const gameInfo = await App.firebase.getGameInfo(gamecode);
@@ -105,7 +104,8 @@ export default () => {
       const gameStatus = gameInfo.result
 
       document.getElementById('invitecode').innerHTML += gamecode;
-      document.getElementById('playtime').innerHTML += `${gameDuration} minutes`;
+  
+
      
 
       if (MAPBOX_API_KEY !== '') {
@@ -138,7 +138,7 @@ export default () => {
 
       getCurrentPlayers()
       
-      setInterval(async () => {
+      window.myInterval4 = setInterval(async () => {
         const users = []
         await App.firebase.getFirestore().collection('users').where('lobbycode', '==', gamecode)
           .get()
@@ -176,6 +176,36 @@ export default () => {
         }
       }, 5000);
 
+      function startTimer(duration, display) {
+        var timer = duration, minutes, seconds;
+        window.myInterval3 = setInterval(myTimer,1000)
+      function myTimer () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display.textContent = minutes + ":" + seconds;
+        if (--timer < 0) {
+          /*
+            clearInterval(window.myInterval1);
+            clearInterval(window.myInterval2);
+            clearInterval(window.myInterval3);
+            clearInterval(window.myInterval4);
+        */
+            const gameRef = App.firebase.getFirestore().collection('game').doc(gamecode);
+            const setGameWithMerge = gameRef.set({
+              result: 'finished',
+            }, { merge: true });
+        }
+      }
+      };
+      function beginTimer () {
+          const amountOfMinutesSeconds = gameDuration * 60;
+          const display = document.getElementById('time');
+          startTimer(amountOfMinutesSeconds, display);
+      };
+      beginTimer()
+
       }
     } else {
       App.router.navigate('homepage');
@@ -197,10 +227,14 @@ export default () => {
   });
 
   document.getElementById('mapbox-exit').addEventListener('click', () => {
-    clearInterval();
     App.firebase.getAuth().onAuthStateChanged(async (user) => {
       if (user) {
-
+        /*
+        clearInterval(window.myInterval1);
+        clearInterval(window.myInterval2);
+        clearInterval(window.myInterval3);
+        clearInterval(window.myInterval4);
+        */
         const info = await App.firebase.getUserInfo(user.uid);
         const timestamp = String(Date.now())
         const gamecode = info.lobbycode;
