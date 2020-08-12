@@ -33,9 +33,10 @@ export default () => {
           codeRef.onSnapshot((doc) => {
             App.firebase.getAuth().onAuthStateChanged(async (user) => {
               if (user) {
+
+
                 // add lobby code as latest game to User Database
                 const userRef = App.firebase.getFirestore().collection('users').doc(user.uid);
-
                 const setWithMerge = userRef.set({
                   lobbycode: invitedcode,
                   team: 'player',
@@ -45,7 +46,8 @@ export default () => {
                 if(gamestatus.result == 'created'){
                   await App.firebase.setPlayerType(user.uid, 'speler')
                   App.router.navigate('/lobby');
-                  
+                } else if (gamestatus.result == 'finished'){
+                  alert("This game has finished.");
                 }
                 //App.router.navigate('/mapbox');
               } else {

@@ -3,7 +3,7 @@ import './styles/styles.scss';
 import * as consts from './consts';
 import App from './lib/App';
 import routes from './routes';
-import 'regenerator-runtime/runtime'
+import 'regenerator-runtime/runtime';
 /**
  * This function will initialize our app
  */
@@ -54,13 +54,12 @@ window.addEventListener('load', () => {
 });
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js')
-  .then((reg) => {
-    // registration worked
-    console.log('Registration succeeded. Scope is ' + reg.scope);
-  }).catch((error) => {
-    // registration failed
-    console.log('Registration failed with ' + error);
-  });
+	navigator.serviceWorker.register('/sw.js').then(function(registration) {
+    // Registration was successful
+    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+}).catch(function(err) {
+    // registration failed :(
+    	console.log('ServiceWorker registration failed: ', err);
+    });
 }
 

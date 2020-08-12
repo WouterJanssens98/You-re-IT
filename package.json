@@ -11,6 +11,13 @@
     "type": "git",
     "url": "git+https://github.com/gdmgent-1920-mobdev1/1920-mobdev1-code-template-full.git"
   },
+  "browserslist": [
+    "last 3 and_chr versions",
+    "last 3 chrome versions",
+    "last 3 opera versions",
+    "last 3 ios_saf versions",
+    "last 3 safari versions"
+  ],
   "bugs": {
     "url": "https://github.com/gdmgent-1920-mobdev1/1920-mobdev1-code-template-full/issues"
   },
@@ -59,11 +66,13 @@
     "webpack-dev-server": "^3.8.1"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "firebase": "^7.6.1",
     "handlebars": "^4.5.3",
     "mapbox-gl": "^1.6.1",
     "navigo": "^7.1.2",
     "random-location": "^1.1.2",
+    "regenerator-runtime": "^0.13.7",
     "serviceworker-webpack-plugin": "^1.0.1"
   }
 }

@@ -93,7 +93,10 @@ export default () => {
       function start(){
         App.firebase.isTikked(gamecode,useruid)
       }
+
+      // update location every 10 seconds
       window.myInterval1 = setInterval(update,10000)
+      // check if user is located within tag distance every 15 seconds
       window.myInterval2 = setInterval(start, 15000)
    
 
@@ -112,6 +115,8 @@ export default () => {
         // eslint-disable-next-line no-unused-vars
         const mapBox = new MapBox(MAPBOX_API_KEY, mapBoxOptions);
         var userlist = [];
+
+
         async function getCurrentPlayers(){
         App.firebase.getFirestore().collection("users").where("lobbycode", "==", gamecode)
         .onSnapshot(function(querySnapshot) {
@@ -136,6 +141,7 @@ export default () => {
   
       };
 
+      //render the players for the first time
       getCurrentPlayers()
       
       window.myInterval4 = setInterval(async () => {

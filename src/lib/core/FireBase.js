@@ -11,6 +11,7 @@ import 'firebase/auth';
 import 'firebase/analytics';
 import Router from './Router';
 import * as consts from '../../consts';
+import App from '../App';
 
 class FireBase {
   constructor(apiKey, projectId, messagingSenderId) {
@@ -86,7 +87,9 @@ class FireBase {
       });
     }));
    
-}
+  }
+
+  
 
   leaveGame(uid) {
     const gameRef = this.getFirestore().collection("users").doc(uid);

@@ -46,13 +46,12 @@ export default () => {
 
     App.firebase.getGameStatus(gamecode,useruid);
 
-
     function getCurrentPlayers(gamecode){
         App.firebase.getFirestore().collection("users").where("lobbycode", "==", gamecode)
         .onSnapshot(function(querySnapshot) {
         playerdiv.innerHTML ="";
         var users = [];
-        querySnapshot.forEach(function(doc) {
+        querySnapshot.forEach( async function(doc) {
             users.push(doc.data());
             const line = document.createElement('div');
             const p1 = document.createElement('p');
@@ -66,10 +65,10 @@ export default () => {
             line.appendChild(p2)
             playerdiv.appendChild(line)
         });
-        
         });
 
     };
+
 
     
     
@@ -79,6 +78,8 @@ export default () => {
       quitGame.innerHTML = "      End game";
       document.getElementsByClassName('o-lobbyform2')[0].style.visibility = 'visible';
     }
+
+    
 
 
     getCurrentPlayers(gamecode);
