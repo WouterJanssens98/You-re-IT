@@ -91,7 +91,6 @@ export default () => {
       // push latest location every 5 seconds to Firestore
 
       function start(){
-        console.log("starting...")
         App.firebase.isTikked(gamecode,useruid)
       }
 
