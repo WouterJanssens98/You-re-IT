@@ -91,13 +91,14 @@ export default () => {
       // push latest location every 5 seconds to Firestore
 
       function start(){
+        console.log("starting...")
         App.firebase.isTikked(gamecode,useruid)
       }
 
       // update location every 10 seconds
-      window.myInterval1 = setInterval(update,10000)
+      window.myInterval1 = setInterval(update,2500)
       // check if user is located within tag distance every 15 seconds
-      window.myInterval2 = setInterval(start, 15000)
+      window.myInterval2 = setInterval(start, 3000)
    
 
       const gameInfo = await App.firebase.getGameInfo(gamecode);

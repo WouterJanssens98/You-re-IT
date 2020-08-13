@@ -242,6 +242,7 @@ class FireBase {
       dist = dist * 60 * 1.1515;
       if (unit=="K") { dist = dist * 1.609344 }
       if (unit=="N") { dist = dist * 0.8684 }
+      console.log(dist)
       return dist;
     }
   }
@@ -305,15 +306,17 @@ class FireBase {
         tikkerLong : userLong
       }, { merge: true });
       
-      if(distance < 10){
+      if(distance < 2000){
         if(tikker.cooldown == "inactive"){
           window.alert(`Proficiat! Je hebt een medespeler kunnen tikken`)
         } else {
+          // do nothing, cooldown is stil active
         }
       }      
     }else if(type == "speler"){
-      if(distance < 10){
+      if(distance < 2000){
         if(tikker.cooldown == "active"){
+          // do nothing, cooldown is active
         }else if (tikker.cooldown == "inactive"){
           const setNewMerge = gameRef.set({
             tikkerLat : userLat,
